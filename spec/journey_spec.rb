@@ -1,8 +1,9 @@
-require 'journey'
+require './lib/journey'
+require './lib/oystercard'
 
 describe Journey do
 
-  subject(:journey) { described_class.new }
+  subject(:journey) { described_class.new('entry_station') }
 
   it 'class has been created' do
     expect(subject).to be_a(Journey)
@@ -38,9 +39,9 @@ describe Journey do
 
   describe 'journey completed' do
     let(:station) {double :station}
-    it {is_expected.to respond_to(:complete?).with(0).argument}
+    it {is_expected.to respond_to(:complete_journey).with(1).argument}
     it 'false when class is brand new' do
-      expect(journey.complete?).to be_falsey
+      expect(journey.complete_journey('bank')).to be_falsey
     end
     it 'false when class journey started but not ended' do
       journey.start_journey(station)
