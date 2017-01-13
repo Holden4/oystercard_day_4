@@ -2,10 +2,15 @@ require 'oystercard'
 
 describe Oystercard do
 
-  init_amount = 50
   let(:station) {"Bank"}
   subject(:card1) { described_class.new }
-  subject(:card2) { described_class.new init_amount }
+  subject(:card2) { described_class.new }
+  init_amount = 50
+
+  before do
+    card2.top_up(init_amount)
+  end
+
 
   maximum_balance = Oystercard::MAX_BALANCE
   min_fare = Oystercard::MIN_FARE

@@ -8,7 +8,7 @@ attr_accessor :entry_station, :exit_station
     @exit_station = nil
   end
 
-  def complete_journey()
+  def complete_journey(exit_station)
     @exit_station = exit_station
   end
 
