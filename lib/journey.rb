@@ -13,13 +13,7 @@ attr_accessor :entry_station, :exit_station
   end
 
   def fare
-    if entry_station == nil || exit_station == nil
-      6
-    else
-      1
-    end  
+    entry_station == nil || exit_station == nil ? 6 : 1
   end
-
-
 
 end
