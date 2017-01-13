@@ -28,7 +28,6 @@ class Oystercard
      write_to_history
     end
     @current_journey = Journey.new(entry_station)
-
   end
 
   def touch_out(exit_station)

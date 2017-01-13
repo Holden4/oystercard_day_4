@@ -59,20 +59,12 @@ describe Oystercard do
       card2.touch_in(station)
       expect(card2).to be_in_journey
     end
-    it 'raises an error if card already checked in' do
-      error_message = "You have already touched in!"
-      card2.touch_in(station)
-      expect {card2.touch_in(station)}.to raise_error(error_message)
-    end
     it 'raised an error if card has insufficient funds' do
       error_message = "Insufficient funds for the journey."
       expect{card1.touch_in(station)}.to raise_error(error_message)
     end
     it { is_expected.to respond_to(:touch_in).with(1).argument }
-    it "passes station to entry_station instance" do
-      card2.touch_in(station)
-      expect(card2.entry_station).to eq(station)
-    end
+
   end
 
   describe 'touch_out' do
@@ -86,15 +78,6 @@ describe Oystercard do
       card2.touch_in(station)
       expect{ card2.touch_out(station) }.to change{ card2.balance }.by -min_fare
     end
-    it 'raises an error if card already checked out' do
-      error_message = "You have already touched out!"
-      expect {card1.touch_out(station)}.to raise_error(error_message)
-    end
-    it 'sets entry station to nil' do
-      card2.touch_in(station)
-      card2.touch_out(station)
-      expect(card2.entry_station).to eq nil
-    end
   end
 
   describe 'history' do
@@ -105,18 +88,18 @@ describe Oystercard do
     it 'shows the one journey history of the card' do
       card2.touch_in(station)
       card2.touch_out(station)
-      expect(card2.history).to eq ({"j1"=>[station, station]})
+      expect(card2.history).to eq ([{entry_station: station, exit_station: station}])
     end
     it 'shows the history of stations the card has been to, when more than 1' do
       n = 7
-      hash = Hash.new
+      journey_log = []
       n.times do
         card2.touch_in(station)
         card2.touch_out(station)
-        hash.store("j#{hash.length + 1}",[station,station])
+        journey_log << {entry_station: station, exit_station: station}
 
       end
-      expect(card2.history).to eq (hash)
+      expect(card2.history).to eq (journey_log)
     end
   end
 end
