@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
 
-  let(:station) {"Bank"}
+  let(:station) {double :station}
   subject(:card1) { described_class.new }
   subject(:card2) { described_class.new }
   init_amount = 50
@@ -43,7 +43,6 @@ describe Oystercard do
   end
 
   describe 'in_journey' do
-    let(:station) {double :station}
     it 'checks that card is not in journey by default' do
       expect(card1.in_journey?).to be(false)
     end
@@ -54,7 +53,6 @@ describe Oystercard do
   end
 
   describe 'touch_in' do
-    let(:station) {double :station}
     it 'sets value for variable in_journey to true' do
       card2.touch_in(station)
       expect(card2).to be_in_journey
@@ -68,7 +66,6 @@ describe Oystercard do
   end
 
   describe 'touch_out' do
-    let(:station) {double :station}
     it 'sets value for variable in_journey to false' do
       card2.touch_in(station)
       card2.touch_out(station)
@@ -78,10 +75,16 @@ describe Oystercard do
       card2.touch_in(station)
       expect{ card2.touch_out(station) }.to change{ card2.balance }.by -min_fare
     end
+
+    it 'charges a penalty if already touched out' do
+      penalty_fare = 6
+      card1.touch_out(station)
+      expect {card1.touch_out(station)}.to change{card1.balance}.by(-penalty_fare)
+    end
+
   end
 
   describe 'history' do
-    let(:station) {double :station}
     it 'history is empty by default' do
       expect(card2.history).to be_empty
     end
